@@ -7,13 +7,16 @@ class CronometroView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Cronômetro de Voltas')),
-      body: SingleChildScrollView(  // Envuelve el Column en un SingleChildScrollView
+      body: SingleChildScrollView(
+        // Envuelve el Column en un SingleChildScrollView
         child: Column(
           children: [
             // Cronômetro que muestra el tiempo total
-            Expanded(
+            Container(
+              height: 200, // Ajusta el tamaño del contenedor para el cronómetro
               child: Center(
                 child: Consumer<CronometroViewModel>(
+                  // Uso de Consumer para acceder al viewModel
                   builder: (_, viewModel, __) {
                     return Text(
                       '${viewModel.tempoTotal.inMinutes}:${(viewModel.tempoTotal.inSeconds % 60).toString().padLeft(2, '0')}.${(viewModel.tempoTotal.inMilliseconds % 1000 ~/ 100)}',
@@ -26,6 +29,7 @@ class CronometroView extends StatelessWidget {
 
             // Botones para controlar el cronômetro y mostrar las voltas
             Consumer<CronometroViewModel>(
+              // Acceso al viewModel para los botones
               builder: (_, viewModel, __) {
                 return Column(
                   children: [
@@ -34,11 +38,13 @@ class CronometroView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: viewModel.estaRodando ? null : viewModel.iniciar,
+                          onPressed:
+                              viewModel.estaRodando ? null : viewModel.iniciar,
                           child: Text('Iniciar'),
                         ),
                         ElevatedButton(
-                          onPressed: viewModel.estaRodando ? viewModel.pausar : null,
+                          onPressed:
+                              viewModel.estaRodando ? viewModel.pausar : null,
                           child: Text('Pausar'),
                         ),
                         ElevatedButton(
@@ -53,14 +59,19 @@ class CronometroView extends StatelessWidget {
                     ),
 
                     // Lista de voltas registradas
-                    Expanded(
+                    Container(
+                      height: 200, // Ajusta el tamaño de la lista de voltas
                       child: ListView.builder(
                         itemCount: viewModel.voltas.length,
                         itemBuilder: (context, index) {
                           final volta = viewModel.voltas[index];
                           return ListTile(
-                            title: Text('Volta ${volta.numero} - ${volta.tempoVolta.inSeconds}s'),
-                            subtitle: Text('Tempo Total: ${volta.tempoTotal.inSeconds}s'),
+                            title: Text(
+                              'Volta ${volta.numero} - ${volta.tempoVolta.inSeconds}s',
+                            ),
+                            subtitle: Text(
+                              'Tempo Total: ${volta.tempoTotal.inSeconds}s',
+                            ),
                           );
                         },
                       ),
@@ -75,4 +86,3 @@ class CronometroView extends StatelessWidget {
     );
   }
 }
-
