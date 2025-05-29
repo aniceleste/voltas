@@ -8,69 +8,75 @@ class CronometroView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Cronômetro de Voltas')),
       body: SingleChildScrollView(
-        // Envuelve el Column en un SingleChildScrollView
         child: Column(
           children: [
-            // Cronômetro que muestra el tiempo total
-            Container(
-              height: 200, // Ajusta el tamaño del contenedor para el cronómetro
-              child: Center(
-                child: Consumer<CronometroViewModel>(
-                  // Uso de Consumer para acceder al viewModel
-                  builder: (_, viewModel, __) {
-                    return Text(
-                      '${viewModel.tempoTotal.inMinutes}:${(viewModel.tempoTotal.inSeconds % 60).toString().padLeft(2, '0')}.${(viewModel.tempoTotal.inMilliseconds % 1000 ~/ 100)}',
-                      style: TextStyle(fontSize: 40),
-                    );
-                  },
+            Semantics(
+              label: 'Tempo total do cronômetro',
+              child: Container(
+                height: 200,
+                child: Center(
+                  child: Consumer<CronometroViewModel>(
+                    builder: (_, viewModel, __) {
+                      final minutos = viewModel.tempoTotal.inMinutes;
+                      final segundos = (viewModel.tempoTotal.inSeconds % 60).toString().padLeft(2, '0');
+                      final milis = (viewModel.tempoTotal.inMilliseconds % 1000 ~/ 100);
+                      return Text(
+                        '$minutos:$segundos.$milis',
+                        style: TextStyle(fontSize: 40),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-
-            // Botones para controlar el cronômetro y mostrar las voltas
             Consumer<CronometroViewModel>(
-              // Acceso al viewModel para los botones
               builder: (_, viewModel, __) {
                 return Column(
                   children: [
-                    // Botones de control (Iniciar, Pausar, Volta, Reiniciar)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ElevatedButton(
-                          onPressed:
-                              viewModel.estaRodando ? null : viewModel.iniciar,
-                          child: Text('Iniciar'),
+                        Semantics(
+                          label: 'Botão iniciar',
+                          child: ElevatedButton(
+                            onPressed: viewModel.estaRodando ? null : viewModel.iniciar,
+                            child: Text('Iniciar'),
+                          ),
                         ),
-                        ElevatedButton(
-                          onPressed:
-                              viewModel.estaRodando ? viewModel.pausar : null,
-                          child: Text('Pausar'),
+                        Semantics(
+                          label: 'Botão pausar',
+                          child: ElevatedButton(
+                            onPressed: viewModel.estaRodando ? viewModel.pausar : null,
+                            child: Text('Pausar'),
+                          ),
                         ),
-                        ElevatedButton(
-                          onPressed: viewModel.registrarVolta,
-                          child: Text('Volta'),
+                        Semantics(
+                          label: 'Botão registrar volta',
+                          child: ElevatedButton(
+                            onPressed: viewModel.registrarVolta,
+                            child: Text('Volta'),
+                          ),
                         ),
-                        ElevatedButton(
-                          onPressed: viewModel.reiniciar,
-                          child: Text('Reiniciar'),
+                        Semantics(
+                          label: 'Botão reiniciar',
+                          child: ElevatedButton(
+                            onPressed: viewModel.reiniciar,
+                            child: Text('Reiniciar'),
+                          ),
                         ),
                       ],
                     ),
-
-                    // Lista de voltas registradas
                     Container(
-                      height: 200, // Ajusta el tamaño de la lista de voltas
+                      height: 200,
                       child: ListView.builder(
                         itemCount: viewModel.voltas.length,
                         itemBuilder: (context, index) {
                           final volta = viewModel.voltas[index];
-                          return ListTile(
-                            title: Text(
-                              'Volta ${volta.numero} - ${volta.tempoVolta.inSeconds}s',
-                            ),
-                            subtitle: Text(
-                              'Tempo Total: ${volta.tempoTotal.inSeconds}s',
+                          return Semantics(
+                            label: 'Volta número ${volta.numero}, tempo da volta ${volta.tempoVolta.inSeconds} segundos, tempo total ${volta.tempoTotal.inSeconds} segundos',
+                            child: ListTile(
+                              title: Text('Volta ${volta.numero} - ${volta.tempoVolta.inSeconds}s'),
+                              subtitle: Text('Tempo Total: ${volta.tempoTotal.inSeconds}s'),
                             ),
                           );
                         },
