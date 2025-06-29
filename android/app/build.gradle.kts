@@ -8,11 +8,14 @@ plugins {
 android {
     namespace = "com.example.cronometro_voltas"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -41,4 +44,15 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation "androidx.core:core:1.10.1"
+    implementation "androidx.core:core-ktx:1.10.1"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.android.material:material:1.9.0"
+    implementation "androidx.work:work-runtime:2.7.1"
+    // Este es importante:
+    implementation "androidx.core:core:1.9.0"
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

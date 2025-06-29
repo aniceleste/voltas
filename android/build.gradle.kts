@@ -19,3 +19,11 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+buildscript {
+    ext {
+        // Asegúrate de tener al menos esto:
+        kotlin_version = '1.9.0'
+        compileSdkVersion = 33
+        targetSdkVersion = 33
+    }
+}

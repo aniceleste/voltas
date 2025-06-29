@@ -19,17 +19,17 @@ class CronometroViewModel extends ChangeNotifier {
   bool get estaRodando => _estaRodando;
 
   void _mostrarNotificacao(String titulo, String corpo, {bool persistente = false}) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'cronometro_channel',
-      'Cronômetro Notificações',
-      importance: Importance.max,
-      priority: Priority.high,
-      ongoing: true,
-    );
-    final NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+  final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    'cronometro_channel',
+    'Cronômetro Notificações',
+    importance: Importance.max,
+    priority: Priority.high,
+    ongoing: persistente,
+  );
+  final platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    await _notifier.show(0, titulo, corpo, platformChannelSpecifics);
-  }
+  await _notifier.show(0, titulo, corpo, platformChannelSpecifics);
+}
 
   void _cancelarNotificacao() async {
     await _notifier.cancel(0);
@@ -42,7 +42,7 @@ class CronometroViewModel extends ChangeNotifier {
         notifyListeners();
       });
       _estaRodando = true;
-      _mostrarNotificacao('Cronômetro ativo', 'Contando o tempo...');
+      _mostrarNotificacao('Cronômetro ativo', 'Contando o tempo...', persistente: true);
       _pausaTimer?.cancel();
       notifyListeners();
     }
